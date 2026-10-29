@@ -1,366 +1,511 @@
 
-import { useState } from 'react'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
-function App() {
-  const [prompt, setPrompt] = useState('')
-  const [mode, setMode] = useState('Text to Video')
-  const [duration, setDuration] = useState('5 seconds')
-  const [selectedImage, setSelectedImage] = useState('')
+const characters = [
+  {
+    image: "/characters/character-1.jpg",
+    name: "MUBASHIR PIRZADO",
+    role: "The King",
+    number: "01",
+  },
+  {
+    image: "/characters/character-2.jpg",
+    name: "MANZOOR AHMED",
+    role: "The undefeated soilder",
+    number: "02",
+  },
+  {
+    image: "/characters/character-3.jpg",
+    name: "KAPIL CHAWLA",
+    role: "The helper",
+    number: "03",
+  },
+  {
+    image: "/characters/character%204.jpg",
+    name: "shaham",
+    role: "The friend and doctor",
+    number: "04",
+  },
+  {
+    image: "/characters/character-5.jpg",
+    name: "suleman khan",
+    role: "The warrior",
+    number: "05",
+  },
+];
+
+  function App() {
+  const [showCharacters, setShowCharacters] = useState(false);
+  const [showStories, setShowStories] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    if (showCharacters) return;
+
+    const canvas = document.getElementById("arabian-particles");
+    const hero = document.querySelector(".hero");
+
+    if (!canvas || !hero) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrame;
+    let particles = [];
+    let width = 0;
+    let height = 0;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    const resize = () => {
+      const rect = hero.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      width = rect.width;
+      height = rect.height;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const count = Math.min(80, Math.floor(width / 12));
+
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.5 + 0.5,
+        speed: Math.random() * 0.4 + 0.1,
+        drift: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.5 + 0.2,
+        cyan: Math.random() < 0.12,
+      }));
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (const particle of particles) {
+        particle.y -= particle.speed;
+        particle.x += particle.drift;
+
+        if (particle.y < -5) {
+          particle.y = height + 5;
+          particle.x = Math.random() * width;
+        }
+
+        if (particle.x < -5) particle.x = width + 5;
+        if (particle.x > width + 5) particle.x = -5;
+
+        const color = particle.cyan
+          ? `rgba(65, 220, 255, ${particle.alpha})`
+          : `rgba(255, 193, 91, ${particle.alpha})`;
+
+        ctx.beginPath();
+        ctx.arc(
+          particle.x,
+          particle.y,
+          particle.radius,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = color;
+        ctx.fill();
+      }
+
+      ctx.shadowBlur = 0;
+
+      if (!reducedMotion.matches) {
+        animationFrame = requestAnimationFrame(draw);
+      }
+    };
+
+    resize();
+    draw();
+
+    window.addEventListener("resize", resize);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", resize);
+    };
+  }, [showCharacters]);
+
+  const openCharacters = () => {
+    setShowCharacters(true);
+  };
+
   
+const goHome = () => {
+  setShowCharacters(false);
+  setShowStories(false);
+  window.scrollTo({ top: 0, behavior: "instant" });
+};
 
-  function handleImageChange(event) {
-  const file = event.target.files?.[0]
 
-  if (file) {
-    setSelectedImage(URL.createObjectURL(file))
-  }
-}
   return (
-    <div className="app">
+    <div className="website">
       <nav className="navbar">
-        <a className="logo" href="#">
-          <span className="logo-icon">V</span>
-          <span>MANZOOR<span className="logo-ai">.ai</span></span>
+        <a
+          href="#home"
+          className="logo"
+          onClick={(event) => {
+            event.preventDefault();
+            goHome();
+          }}
+        >
+          <span className="logo-mark">✦</span>
+          MANZOOR <span>THE NIGHT</span>
         </a>
 
-        
-<div className="nav-links">
-  <a href="#create">Create</a>
-  <a href="#features">Features</a>
-  <a href="#about">About</a>
-  <a
-    href="https://www.youtube.com/@mrfunnyai-q6w"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="youtube-link"
-  >
-    <span className="youtube-icon">▶</span>
-    YouTube
-  </a>
-</div>
+        <div className="nav-links">
+          <a
+            href="#home"
+            onClick={(event) => {
+              event.preventDefault();
+              goHome();
+            }}
+          >
+            Home
+          </a>
 
+          {showCharacters ? (
+            <a
+              href="#characters"
+              onClick={(event) => {
+                event.preventDefault();
+                goHome();
+              }}
+            >
+              ← Back
+            </a>
+          ) : (
+            <>
+              <a href="#world">The World</a>
 
-        <button className="sign-in" onClick={() => alert('Account features coming soon!')}>
-          Sign in ↗
+              <a
+                href="#characters"
+                onClick={(event) => {
+                  event.preventDefault();
+                  openCharacters();
+                }}
+              >
+                Characters
+              </a>
+
+              <a
+  href="#stories"
+  onClick={(event) => {
+    event.preventDefault();
+    setShowCharacters(false);
+    setShowStories(true);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }}
+>
+  Stories
+</a>
+              <a href="#about">About</a>
+            </>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="nav-button"
+          onClick={showCharacters ? goHome : openCharacters}
+        >
+          {showCharacters ? "← Back to Home" : "Meet the Legends"}
+          <span>{showCharacters ? "↩" : "↗"}</span>
         </button>
       </nav>
 
-      <main>
-        <section className="hero" id="create">
-          <div className="glow glow-one"></div>
-          <div className="glow glow-two"></div>
+      {showCharacters ? (
+        <main className="character-page">
+          <section className="characters-section" id="characters">
+            <div className="section-heading">
+              <p className="eyebrow">THE PEOPLE OF THE KINGDOM</p>
 
-          <div className="announcement">
-            <span className="live-dot"></span>
-            YOUR IMAGINATION, REIMAGINED
-          </div>
+              <h2>MEET THE CHARACTERS</h2>
 
-          <h1>
-            Ideas into videos.
-            <br />
-<a
-  href="#showcase"
-  className="scroll-down"
-  aria-label="Scroll down to explore AI by Manzoor"
-  title="Scroll down to explore"
->
-  <span className="scroll-label">SCROLL TO EXPLORE</span>
-  <span className="scroll-arrow">↓</span>
-</a>
-
-            <span>Magic into reality.</span>
-          </h1>
-          <p className="creator-credit">
-  Created by <strong>Manzoor Ahmed</strong>
-</p>
-
-          <p className="subtitle">
-            Create stunning AI videos from simple words.
-            <br />
-            Your next big idea starts here.
-          </p>
-
-          <div className="generator">
-            <div className="generator-top">
-              <span className="generator-label">✦ CREATE YOUR VIDEO</span>
-              <span className="free-badge">FREE TO EXPLORE</span>
-            </div>
-
-            <div className="mode-selector">
-              {['Text to Video', 'Image to Video'].map((item) => (
-                <button
-                  key={item}
-                  className={mode === item ? 'mode active' : 'mode'}
-                  onClick={() => setMode(item)}
-                >
-                  {item === 'Text to Video' ? '✍' : '▧'} {item}
-                </button>
-              ))}
-            </div>
-
-            <textarea
-              value={prompt}
-              onChange={(event) => setPrompt(event.target.value)}
-              placeholder={
-                mode === 'Text to Video'
-                  ? 'Describe the video you imagine... A futuristic city floating above the clouds at sunset...'
-                  : 'Describe the animation you want to create from your image...'
-              }
-              rows={4}
-            />
-               
-
-{mode === 'Image to Video' && (
-  <div className="image-upload-area">
-    {selectedImage ? (
-      <div className="image-preview">
-        <img src={selectedImage} alt="Selected image preview" />
-        <button
-          type="button"
-          className="remove-image"
-          onClick={() => {
-            URL.revokeObjectURL(selectedImage)
-            setSelectedImage('')
-          }}
-        >
-          Remove image ×
-        </button>
-      </div>
-    ) : (
-      <label className="upload-box">
-        <span className="upload-icon">↑</span>
-        <strong>Upload an image</strong>
-        <span>Click to browse your device</span>
-        <span className="upload-formats">PNG, JPG, WEBP</span>
-        <input
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-          onChange={handleImageChange}
-          hidden
-        />
-      </label>
-    )}
-  </div>
-)}
-
-  
-
-            <div className="generator-bottom">
-              <label className="duration-label">
-                Duration
-                <select
-                  value={duration}
-                  onChange={(event) => setDuration(event.target.value)}
-                >
-                  <option>5 seconds</option>
-                  <option>10 seconds</option>
-                </select>
-              </label>
+              <p>
+                Five faces. Five destinies. One extraordinary world.
+                Discover the characters who bring these legends to life.
+              </p>
 
               <button
-                className="generate-button"
-                
-onClick={() => {
-  if (mode === 'Text to Video' && !prompt.trim()) {
-    alert('Please describe the video you want to create.')
-    return
-  }
-
-  if (mode === 'Image to Video' && !selectedImage) {
-    alert('Please upload an image first.')
-    return
-  }
-
-  alert(
-    mode === 'Text to Video'
-      ? `Your video prompt is ready!\n\nPrompt: ${prompt}\nDuration: ${duration}\n\nAI video generation will be connected in a future step.`
-      : `Your image is ready!\nDuration: ${duration}\n\nAI video generation will be connected in a future step.`
-  )
-}}
-
+                type="button"
+                className="secondary-button character-back-button"
+                onClick={goHome}
               >
-                ✦ Generate video <span>→</span>
+                ← Return to the Front Page
               </button>
             </div>
-          </div>
 
-          <div className="hero-note">
-            <span>✧</span> Built for creators, dreamers and storytellers
-          </div>
-        </section>
+            <div className="characters-grid">
+              {characters.map((character) => (
+                <article
+                  className="character-card"
+                  key={character.number}
+                >
+                  <div className="character-image">
+                    <img
+                      src={character.image}
+                      alt={character.name}
+                    />
 
-       
-        <section className="showcase" id="showcase">
-          <div className="showcase-heading">
-            <span className="eyebrow">IMAGINATION IN MOTION</span>
-            <h2>Worlds made from <span>words.</span></h2>
-            <p>Explore the kinds of cinematic worlds you can create with AI by Manzoor.</p>
-          </div>
+                    <span className="character-number">
+                      {character.number}
+                    </span>
+                  </div>
 
-          <div className="showcase-grid">
-            <article className="video-card">
-              <div className="video-art art-cosmos">
-                <div className="cosmos-orb"></div>
-                <div className="cosmos-ring"></div>
-                <span className="art-label">01 / COSMIC WORLDS</span>
-                <span className="play-button">▶</span>
-                <span className="art-caption">Beyond the stars</span>
-              </div>
-              <div className="video-card-info">
-                <div>
-                  <h3>Beyond the Universe</h3>
-                  <p>Cosmic cinematic · Sci-fi</p>
-                </div>
-                <span className="card-arrow">↗</span>
-              </div>
-            </article>
-
-            <article className="video-card">
-              <div className="video-art art-dream">
-                <div className="dream-sun"></div>
-                <div className="dream-mountain mountain-back"></div>
-                <div className="dream-mountain mountain-front"></div>
-                <span className="art-label">02 / DREAMSCAPES</span>
-                <span className="play-button">▶</span>
-                <span className="art-caption">A world of wonder</span>
-              </div>
-              <div className="video-card-info">
-                <div>
-                  <h3>Dreamscape</h3>
-                  <p>Fantasy atmosphere · Art</p>
-                </div>
-                <span className="card-arrow">↗</span>
-              </div>
-            </article>
-
-            <article className="video-card">
-              <div className="video-art art-future">
-                <div className="future-sun"></div>
-                <div className="future-building building-one"></div>
-                <div className="future-building building-two"></div>
-                <div className="future-building building-three"></div>
-                <div className="future-road"></div>
-                <span className="art-label">03 / FUTURE CITIES</span>
-                <span className="play-button">▶</span>
-                <span className="art-caption">Tomorrow, imagined</span>
-              </div>
-              <div className="video-card-info">
-                <div>
-                  <h3>Neon Tomorrow</h3>
-                  <p>Future city · Cyberpunk</p>
-                </div>
-                <span className="card-arrow">↗</span>
-              </div>
-            </article>
-          </div>
-
-          <p className="showcase-disclaimer">
-            ✦ Concept previews created with CSS · AI-generated videos coming in a future step
-          </p>
-        </section>
+                  <div className="character-info">
+                    <p className="character-role">{character.role}</p>
+                    <h3>{character.name}</h3>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
         
-        <section className="about" id="about">
-          <div className="showcase-heading">
-            <span className="eyebrow">MEET THE CREATOR</span>
-            <h2>Built with <span>vision.</span></h2>
-            <p>
-              AI by Manzoor is a student-led project exploring the future of
-              AI-powered video creation.
-            </p>
-          </div>
+        </main>
+      ) : showStories ? (
+        <main className="character-page story-page">
+          <section className="story-video-section" id="stories">
+            <div className="story-video-heading">
+              <p className="eyebrow">03 / THE CINEMATIC ARCHIVE</p>
+              <h2>Stories Beyond Time</h2>
+              <p>
+                Enter the world of Vulsar AI through cinematic stories
+                and unforgettable moments.
+              </p>
 
-          <div className="about-card">
-            <h3>Manzoor Ahmed</h3>
-            <p className="creator-role">Founder & Developer of AI by Manzoor</p>
-            <p>
-              My goal is to make creative video technology more accessible
-              by building a platform where ideas can become cinematic videos.
-              This project is part of my journey as a Computer Science student.
-            </p>
-          </div>
-        </section>
+              <button
+                type="button"
+                className="secondary-button character-back-button"
+                onClick={goHome}
+              >
+                ← Back to Home
+              </button>
+            </div>
 
- <section className="features" id="features">
-          <div className="section-heading">
-            <span className="eyebrow">THE FUTURE OF CREATIVITY</span>
-            <h2>Your imagination has no limits.</h2>
-            <p>Everything you need to bring your creative vision to life.</p>
-          </div>
+            <div className="story-video-frame">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/CZkk4EjbIPM"
+                title="Vulsar AI - Cinematic Story 1"
+                allow="encrypted-media; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
 
-          <div className="feature-grid">
-            <article className="feature-card">
-              <div className="feature-icon purple">✦</div>
-              <h3>Text to Video</h3>
-              <p>Turn your written ideas into cinematic video concepts.</p>
-              <span className="feature-link">Explore creation ↗</span>
-            </article>
+            <div className="story-video-frame second-story-video">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/CJvcB4WvrHw"
+                title="Vulsar AI - Cinematic Story 2"
+                allow="encrypted-media; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </section>
+        </main>
+      ) : (
+        <>
+          <main>
 
-            <article className="feature-card">
-              <div className="feature-icon blue">▧</div>
-              <h3>Image to Video</h3>
-              <p>Imagine your still images moving with life and motion.</p>
-              <span className="feature-link">Bring images to life ↗</span>
-            </article>
+            <section className="hero" id="home">
+              <div className="hero-overlay"></div>
 
-            <article className="feature-card">
-              <div className="feature-icon pink">⌘</div>
-              <h3>Made for Creators</h3>
-              <p>A simple creative workspace for your next big idea.</p>
-              <span className="feature-link">Discover more ↗</span>
-            </article>
-          </div>
-        </section>
+              <canvas
+                id="arabian-particles"
+                className="arabian-particles"
+                aria-hidden="true"
+              />
 
-        <section className="closing" id="about">
-          <span className="eyebrow">YOUR NEXT STORY STARTS HERE</span>
-          <h2>Think it. Describe it. <span>Imagine it.</span></h2>
-          <button onClick={() => document.getElementById('create')?.scrollIntoView({ behavior: 'smooth' })}>
-            Start creating <span>→</span>
-          </button>
-        </section>
-      </main>
-      
-      <section className="project-overview" id="project">
-        <div className="showcase-heading">
-          <span className="eyebrow">MY COMPUTER SCIENCE PROJECT</span>
-          <h2>Introducing <span>AI by Manzoor.</span></h2>
-          <p>
-            A student-led project by Manzoor Ahmed to explore AI-powered
-            video creation and modern web development.
-          </p>
-        </div>
+              <div className="ai-glow" aria-hidden="true">
+                <div className="ai-orb">AI</div>
+              </div>
 
-        <div className="about-card">
-          <h3>Project Details</h3>
-          <p><strong>Project name:</strong> AI by Mnazoor</p>
-          <p><strong>Creator:</strong> Manzoor Ahmed</p>
-          <p><strong>Purpose:</strong> Explore a platform that turns creative ideas into videos.</p>
-          <p><strong>Technologies:</strong> React, JavaScript, HTML and CSS.</p>
-          <p><strong>Current stage:</strong> Frontend prototype. Real AI video generation has not been connected yet.</p>
-          <p>
-            <strong>My contribution:</strong> Building the website interface,
-            designing the layout, and learning how its components work.
-          </p>
-        </div>
-      </section>
+              <div className="fire-lantern lantern-one" aria-hidden="true">
+                <div className="lantern-handle"></div>
+                <div className="lantern-top"></div>
+                <div className="lantern-glass">
+                  <div className="flame">
+                    <span className="flame-core"></span>
+                  </div>
+                </div>
+                <div className="lantern-base"></div>
+                <div className="lantern-light"></div>
+              </div>
 
-       
-      <footer className="site-footer">
-        <p>© 2026 AI by Manzoor. All rights reserved.</p>
-        <p>Designed and developed by <strong>Manzoor Ahmed</strong>.</p>
-      </footer>
+              <div className="hero-content">
+                <p className="eyebrow">
+                  AN ANCIENT WORLD • A NEW LEGEND
+                </p>
 
-      <footer>
-        <a className="logo footer-logo" href="#">
-          <span className="logo-icon">V</span>
-          <span>AI by manzoor<span className="logo-ai">.ai</span></span>
-        </a>
-        <p>Made for the next generation of creators.</p>
-        <span>© 2026 AI by Manzoor</span>
-      </footer>
+                <h1>
+                  ENTER THE
+                  <br />
+                  <span>WORLD OF LEGENDS</span>
+                </h1>
+
+                <p className="hero-description">
+                  Beyond the golden dunes lies a world of forgotten
+                  kingdoms, brave warriors, mysterious characters,
+                  and stories waiting to come alive.
+                </p>
+
+                <div className="hero-actions">
+                  <button
+                    type="button"
+                    className="primary-button"
+                    onClick={openCharacters}
+                  >
+                    Discover the Characters <span>↗</span>
+                  </button>
+
+                  <a href="#world" className="secondary-button">
+                    Explore the World
+                  </a>
+                </div>
+              </div>
+
+              <div className="hero-bottom">
+                <span>THE LAND OF SAND & STORIES</span>
+                <span>EST. IN IMAGINATION</span>
+              </div>
+            </section>
+
+            <section className="intro-section" id="world">
+              <p className="eyebrow">THE GATES ARE OPEN</p>
+
+              <h2>A LEGEND WAITS BEYOND THE SANDS</h2>
+
+              <p>
+                Enter a world of ancient palaces, mysterious deserts,
+                legendary characters, and stories waiting to be told.
+                Inspired by the atmosphere of ancient Arabia and
+                brought into a modern cinematic experience.
+              </p>
+            </section>
+
+            <section className="world-grid" id="world-cards">
+              <article className="world-card">
+                <span>01 / THE KINGDOMS</span>
+                <h3>Ancient Worlds</h3>
+                <p>
+                  Explore golden deserts, hidden cities, grand palaces,
+                  and forgotten places.
+                </p>
+              </article>
+
+             
+<article className="world-card" id="stories">
+  <span>02 / THE CHRONICLES</span>
+  <h3>Stories & Scenes</h3>
+  <p>
+    Follow extraordinary journeys, emotional moments,
+    and unforgettable tales.
+  </p>
+  <a
+    href="#story-video"
+    className="story-video-link"
+  >
+    Watch Our Story <span>↗</span>
+  </a>
+</article>
+
+
+              <article className="world-card">
+                <span>03 / THE CREATIVE REALM</span>
+                <h3>Cinematic Studio</h3>
+                <p>
+                  A growing creative space for AI video concepts,
+                  cinematic scenes, and original stories.
+                </p>
+              </article>
+            </section>
+            
+
+
+           
+<section className="about-section" id="about">
+  <p className="eyebrow">OUR VISION</p>
+
+  <h2>WHERE IMAGINATION BECOMES LEGEND</h2>
+
+  <p>
+    Vulsar AI brings the mystery and timeless beauty of
+    ancient Arabia into a modern cinematic experience.
+    Through artificial intelligence, creativity, and
+    storytelling, we transform imagination into
+    unforgettable worlds, characters, and stories.
+  </p>
+
+  <div className="about-credits">
+    <p className="eyebrow">THE CREATIVE TEAM</p>
+    <h3>Created By</h3>
+
+    <div className="creator-list">
+      <span>Manzoor Ahmed</span>
+      <span>Munashir Pirzada</span>
+      <span>Kapil Chawla</span>
+      <span>Mudasir</span>
+      <span>Shaham</span>
     </div>
-  )
+
+    <div className="presented-credit">
+      <p className="eyebrow">ACADEMIC PRESENTATION</p>
+      <h3>Presented To</h3>
+      <p className="professor-name">
+        Assistant Professor Sir Imran Alvi
+      </p>
+    </div>
+
+    <p className="about-tagline">
+      Five Minds. One Vision. A World Beyond Imagination.
+    </p>
+  </div>
+
+  <button
+    type="button"
+    className="secondary-button"
+    onClick={() =>
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      })
+    }
+  >
+    Return to the Beginning ↑
+  </button>
+</section>
+
+          </main>
+
+          <footer className="footer">
+            <a href="#home" className="logo">
+              ✦ MANZOOR <span>THE NIGHT</span>
+            </a>
+
+            <p>A WORLD OF STORIES, WRITTEN IN THE NIGHT.</p>
+
+            <span>
+              © {new Date().getFullYear()} MANZOOR THE NIGHT
+            </span>
+          </footer>
+        </>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
