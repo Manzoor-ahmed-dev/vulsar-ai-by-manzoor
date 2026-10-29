@@ -21,14 +21,25 @@ function App() {
       <nav className="navbar">
         <a className="logo" href="#">
           <span className="logo-icon">V</span>
-          <span>vulsar<span className="logo-ai">.ai</span></span>
+          <span>MANZOOR<span className="logo-ai">.ai</span></span>
         </a>
 
-        <div className="nav-links">
-          <a href="#create">Create</a>
-          <a href="#features">Features</a>
-          <a href="#about">About</a>
-        </div>
+        
+<div className="nav-links">
+  <a href="#create">Create</a>
+  <a href="#features">Features</a>
+  <a href="#about">About</a>
+  <a
+    href="https://www.youtube.com/@mrfunnyai-q6w"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="youtube-link"
+  >
+    <span className="youtube-icon">▶</span>
+    YouTube
+  </a>
+</div>
+
 
         <button className="sign-in" onClick={() => alert('Account features coming soon!')}>
           Sign in ↗
@@ -48,6 +59,16 @@ function App() {
           <h1>
             Ideas into videos.
             <br />
+<a
+  href="#showcase"
+  className="scroll-down"
+  aria-label="Scroll down to explore AI by Manzoor"
+  title="Scroll down to explore"
+>
+  <span className="scroll-label">SCROLL TO EXPLORE</span>
+  <span className="scroll-arrow">↓</span>
+</a>
+
             <span>Magic into reality.</span>
           </h1>
           <p className="creator-credit">
@@ -174,7 +195,7 @@ onClick={() => {
           <div className="showcase-heading">
             <span className="eyebrow">IMAGINATION IN MOTION</span>
             <h2>Worlds made from <span>words.</span></h2>
-            <p>Explore the kinds of cinematic worlds you can create with Vulsar AI.</p>
+            <p>Explore the kinds of cinematic worlds you can create with AI by Manzoor.</p>
           </div>
 
           <div className="showcase-grid">
@@ -244,14 +265,14 @@ onClick={() => {
             <span className="eyebrow">MEET THE CREATOR</span>
             <h2>Built with <span>vision.</span></h2>
             <p>
-              Vulsar AI is a student-led project exploring the future of
+              AI by Manzoor is a student-led project exploring the future of
               AI-powered video creation.
             </p>
           </div>
 
           <div className="about-card">
             <h3>Manzoor Ahmed</h3>
-            <p className="creator-role">Founder & Developer of Vulsar AI</p>
+            <p className="creator-role">Founder & Developer of AI by Manzoor</p>
             <p>
               My goal is to make creative video technology more accessible
               by building a platform where ideas can become cinematic videos.
@@ -303,7 +324,7 @@ onClick={() => {
       <section className="project-overview" id="project">
         <div className="showcase-heading">
           <span className="eyebrow">MY COMPUTER SCIENCE PROJECT</span>
-          <h2>Introducing <span>Vulsar AI.</span></h2>
+          <h2>Introducing <span>AI by Manzoor.</span></h2>
           <p>
             A student-led project by Manzoor Ahmed to explore AI-powered
             video creation and modern web development.
@@ -312,7 +333,7 @@ onClick={() => {
 
         <div className="about-card">
           <h3>Project Details</h3>
-          <p><strong>Project name:</strong> Vulsar AI</p>
+          <p><strong>Project name:</strong> AI by Mnazoor</p>
           <p><strong>Creator:</strong> Manzoor Ahmed</p>
           <p><strong>Purpose:</strong> Explore a platform that turns creative ideas into videos.</p>
           <p><strong>Technologies:</strong> React, JavaScript, HTML and CSS.</p>
@@ -326,17 +347,17 @@ onClick={() => {
 
        
       <footer className="site-footer">
-        <p>© 2026 Vulsar AI. All rights reserved.</p>
+        <p>© 2026 AI by Manzoor. All rights reserved.</p>
         <p>Designed and developed by <strong>Manzoor Ahmed</strong>.</p>
       </footer>
 
       <footer>
         <a className="logo footer-logo" href="#">
           <span className="logo-icon">V</span>
-          <span>vulsar<span className="logo-ai">.ai</span></span>
+          <span>AI by manzoor<span className="logo-ai">.ai</span></span>
         </a>
         <p>Made for the next generation of creators.</p>
-        <span>© 2026 Vulsar AI</span>
+        <span>© 2026 AI by Manzoor</span>
       </footer>
     </div>
   )

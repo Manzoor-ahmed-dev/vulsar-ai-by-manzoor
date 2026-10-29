@@ -519,3 +519,36 @@ footer {
     flex-wrap: wrap;
   }
 }
+
+/* Mobile navbar adjustments */
+@media (max-width: 600px) {
+  .navbar {
+    height: auto;
+    min-height: 70px;
+    padding: 12px 4%;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .youtube-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+/* Keep images within their containers */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
